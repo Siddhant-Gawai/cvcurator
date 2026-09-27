@@ -10,9 +10,9 @@ export function resolveFont(font:string):FontFamily {
 for(const family of fontFamilies) {
  const id=family.toLowerCase().replaceAll(' ','-');
  Font.register({family,fonts:[
-  {src:`/fonts/${id}-400-normal.ttf`,fontWeight:400,fontStyle:'normal'},
-  {src:`/fonts/${id}-700-normal.ttf`,fontWeight:700,fontStyle:'normal'},
-  {src:`/fonts/${id}-400-italic.ttf`,fontWeight:400,fontStyle:'italic'},
-  {src:`/fonts/${id}-700-italic.ttf`,fontWeight:700,fontStyle:'italic'},
+  {src:`${import.meta.env.BASE_URL}fonts/${id}-400-normal.ttf`,fontWeight:400,fontStyle:'normal'},
+  {src:`${import.meta.env.BASE_URL}fonts/${id}-700-normal.ttf`,fontWeight:700,fontStyle:'normal'},
+  {src:`${import.meta.env.BASE_URL}fonts/${id}-400-italic.ttf`,fontWeight:400,fontStyle:'italic'},
+  {src:`${import.meta.env.BASE_URL}fonts/${id}-700-italic.ttf`,fontWeight:700,fontStyle:'italic'},
  ]});
 }

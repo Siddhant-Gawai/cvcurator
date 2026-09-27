@@ -1,0 +1,18 @@
+:root {
+  --theme-primary: #0f2a4a;
+  --theme-primary-hover: #1a3b63;
+  --theme-secondary: #0e8a85;
+  --theme-accent: #d97706;
+  --theme-success: #059669;
+  --theme-danger: #dc2626;
+  --theme-background: #f8f9ff;
+  --theme-surface: #ffffff;
+  --theme-surface-muted: #f1f5f9;
+  --theme-surface-blue: #e5eeff;
+  --theme-text: #0b1c30;
+  --theme-text-muted: #64748b;
+  --theme-border: #e2e8f0;
+  --theme-focus: #93c5fd;
+  --theme-radius-control: 4px;
+  --theme-radius-card: 8px;
+}

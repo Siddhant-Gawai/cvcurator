@@ -38,7 +38,11 @@ export function CVDocument({cv}:{cv:CV}){
    <Text style={heading} minPresenceAhead={48}>{names[section.id].toUpperCase()}</Text>
    {section.entries.filter(e=>!e.hidden).map(e=>entryBody(e,section.id))}
   </View>)}
-  {s.footerEnabled&&<><Text fixed style={{position:'absolute',bottom:24,left:s.margin,fontSize:8,color:'#64748b'}}>{s.footerNameEnabled?(s.footerName||c.name):''}</Text>{s.footerPageEnabled&&<Text fixed style={{position:'absolute',bottom:24,left:s.margin,right:s.margin,fontSize:8,color:'#0f2a4a',fontWeight:700,textAlign:s.footerPagePosition}} render={({pageNumber})=>String(pageNumber)}/>}<Text fixed style={{position:'absolute',bottom:24,right:s.margin,fontSize:8,color:'#64748b',textAlign:'right'}}>{s.footerEmailEnabled?(s.footerEmail||c.email):''}</Text></>}
+  {s.footerEnabled&&<>
+   {s.footerNameEnabled&&<Text fixed style={{position:'absolute',bottom:24,left:s.margin,right:s.margin,fontSize:8,color:'#64748b',textAlign:!s.footerEmailEnabled&&!s.footerPageEnabled?s.footerPagePosition:'left'}}>{c.name}</Text>}
+   {s.footerPageEnabled&&<Text fixed style={{position:'absolute',bottom:24,left:s.margin,right:s.margin,fontSize:8,color:'#0f2a4a',fontWeight:700,textAlign:s.footerNameEnabled||s.footerEmailEnabled?'center':s.footerPagePosition}} render={({pageNumber})=>String(pageNumber)}/>}
+   {s.footerEmailEnabled&&<Text fixed style={{position:'absolute',bottom:24,left:s.margin,right:s.margin,fontSize:8,color:'#64748b',textAlign:!s.footerNameEnabled&&!s.footerPageEnabled?s.footerPagePosition:'right'}}>{c.email}</Text>}
+  </>}
  </Page></Document>;
 }
 

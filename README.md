@@ -16,6 +16,11 @@ A browser-based CV builder for students and early-career professionals. Edit you
 - Optional Font Awesome contact icons, including the LinkedIn brand icon, rendered as PDF vector paths.
 - Automatic browser-local saving and JSON backup export/import with validation and replacement confirmation.
 
+## Recent updates
+
+- **2026-09-29:** Dropdown triggers now display the selected option's icon. Controls and options without icons no longer reserve an empty icon slot. Decorative icons are hidden from screen readers, leaving the option labels as their accessible text.
+- Footer alignment applies to a lone name, email, or page number; multiple items retain their fixed positions. Footer contact values stay synchronized with the contact form.
+
 ## Footer
 
 Enable the footer under **Design > Footer**, then select name, email, and/or page number using their individual checkboxes.

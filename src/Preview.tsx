@@ -19,6 +19,8 @@ export function Preview({blob,zoom,onPages}:{blob?:Blob;zoom:number;onPages:(n:n
  const [width,setWidth]=useState(700);
  const [error,setError]=useState('');
  const container=useRef<HTMLDivElement>(null);
+ const onPagesRef=useRef(onPages);
+ useEffect(()=>{onPagesRef.current=onPages;},[onPages]);
  useEffect(()=>{
   const observer=new ResizeObserver(entries=>{const next=entries[0].contentRect.width;if(next>0)setWidth(next);});
   if(container.current)observer.observe(container.current);
@@ -32,12 +34,12 @@ export function Preview({blob,zoom,onPages}:{blob?:Blob;zoom:number;onPages:(n:n
     const data=await blob.arrayBuffer();if(cancelled)return;
     task=getDocument({data});const doc=await task.promise;
     const next=await Promise.all(Array.from({length:doc.numPages},(_,index)=>doc.getPage(index+1)));
-    if(!cancelled){setPages(next);setError('');onPages(doc.numPages);}
+    if(!cancelled){setPages(next);setError('');onPagesRef.current(doc.numPages);}
    }catch{if(!cancelled)setError('Preview could not load. You can still download your PDF.');}
   }
   void load();
   return()=>{cancelled=true;void task?.destroy();};
- },[blob,onPages]);
+ },[blob]);
  return <div className="paper-scroll" ref={container}>
   {error?<p className="preview-loading" role="alert">{error}</p>:pages.length?pages.map(page=><div className="paper-wrap" key={`${blob?.size}-${page.pageNumber}`}>
    <Paper page={page} scale={Math.max(.25,Math.min((width-64)/page.getViewport({scale:1}).width,1.15))*zoom/100}/>

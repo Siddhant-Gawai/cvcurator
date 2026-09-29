@@ -18,6 +18,7 @@ A browser-based CV builder for students and early-career professionals. Edit you
 
 ## Recent updates
 
+- **2026-09-30:** Preview PDF loading now depends only on the document blob. Updating the page-count callback no longer destroys and reloads the same PDF during parent rerenders, avoiding unnecessary work in the expanded preview.
 - **2026-09-29:** Dropdown triggers now display the selected option's icon. Controls and options without icons no longer reserve an empty icon slot. Decorative icons are hidden from screen readers, leaving the option labels as their accessible text.
 - Footer alignment applies to a lone name, email, or page number; multiple items retain their fixed positions. Footer contact values stay synchronized with the contact form.
 

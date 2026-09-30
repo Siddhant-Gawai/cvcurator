@@ -6,12 +6,14 @@ import {CVDocument} from './pdf';
 import type {CV} from './model';
 GlobalWorkerOptions.workerSrc=worker;
 export function useGeneratedPDF(cv:CV){
- const [result,setResult]=useState<{blob:Blob;url:string;cv:CV}|null>(null);const [error,setError]=useState('');
+ const [result,setResult]=useState<{blob:Blob;url:string;cv:CV}|null>(null);
+ const [failure,setFailure]=useState<{cv:CV;message:string}|null>(null);
  const latest=useRef(cv); latest.current=cv; const running=useRef(false); const queued=useRef<CV|null>(null);const alive=useRef(true);
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
- useEffect(()=>{const timer=setTimeout(()=>{queued.current=cv;void run();},550);async function run(){if(running.current)return;running.current=true;while(queued.current){const next=queued.current;queued.current=null;try{const blob=await pdf(<CVDocument cv={next}/>).toBlob();if(alive.current&&next===latest.current){setResult({blob,url:URL.createObjectURL(blob),cv:next});setError('');}}catch{if(alive.current)setError('We could not prepare your PDF. Try another font or reload the app.');}}running.current=false;}return()=>clearTimeout(timer);},[cv]);
+ useEffect(()=>{const timer=setTimeout(()=>{queued.current=cv;void run();},550);async function run(){if(running.current)return;running.current=true;while(queued.current){const next=queued.current;queued.current=null;try{const blob=await pdf(<CVDocument cv={next}/>).toBlob();if(alive.current&&next===latest.current){setResult({blob,url:URL.createObjectURL(blob),cv:next});setFailure(null);}}catch{if(alive.current&&next===latest.current)setFailure({cv:next,message:'We could not prepare your PDF. Try another font or reload the app.'});}}running.current=false;}return()=>clearTimeout(timer);},[cv]);
  useEffect(()=>()=>{if(result)URL.revokeObjectURL(result.url);},[result]);
- return {...result,error,busy:!result||result.cv!==cv};
+ const error=failure?.cv===cv?failure.message:'';
+ return {...result,error,busy:!error&&(!result||result.cv!==cv)};
 }
 function Paper({page,scale}:{page:PDFPageProxy;scale:number}){const canvas=useRef<HTMLCanvasElement>(null);useEffect(()=>{const viewport=page.getViewport({scale:scale*2});const target=canvas.current!;target.width=viewport.width;target.height=viewport.height;const task=page.render({canvas:target,viewport});task.promise.catch(()=>{});return()=>task.cancel();},[page,scale]);const v=page.getViewport({scale});return <canvas ref={canvas} className="pdf-paper" style={{width:v.width,height:v.height}} role="img" aria-label={`CV preview, page ${page.pageNumber}. Download the PDF for selectable text and links.`}/>;}
 export function Preview({blob,zoom,onPages}:{blob?:Blob;zoom:number;onPages:(n:number)=>void}) {

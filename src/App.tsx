@@ -119,7 +119,7 @@ export default function App() {
      <Button variant="ghost" size="icon" aria-label="Zoom out" disabled={zoom<=60} onPress={()=>setZoom(value=>value-10)}><Minus size={15}/></Button><Button variant="ghost" aria-label="Reset zoom" onPress={()=>setZoom(100)}>{zoom}%</Button><Button variant="ghost" size="icon" aria-label="Zoom in" disabled={zoom>=150} onPress={()=>setZoom(value=>value+10)}><Plus size={15}/></Button>
     </div></div>
     <div className="preview-status" role="status">{pdf.error||(pdf.busy?'Updating your preview…':`${pages} ${pages===1?'page':'pages'} · ${cv.settings.template==='classic'?'Essential':'Modern'} template`)}</div>
-    <div className="preview-click-target" role="button" tabIndex={0} aria-label="Open CV preview" onClick={()=>setPreviewOpen(true)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' ')setPreviewOpen(true);}}><Preview blob={pdf.blob} zoom={zoom} onPages={setPages}/></div>
+    <div className="preview-click-target" role="button" tabIndex={0} aria-label="Open CV preview" aria-haspopup="dialog" onClick={()=>setPreviewOpen(true)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setPreviewOpen(true);}}}><Preview blob={pdf.blob} zoom={zoom} onPages={setPages}/></div>
     <div className="preview-bottom"><span><Check size={13}/>What you see is what you download.</span><span>PDF · Selectable text</span></div>
    </section>
   </main>

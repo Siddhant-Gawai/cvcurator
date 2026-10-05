@@ -38,6 +38,7 @@ export default function App() {
  const [mobile,setMobile]=useState<'edit'|'preview'>('edit');
  const [zoom,setZoom]=useState(100);const [pages,setPages]=useState(0);const [message,setMessage]=useState('');
  const [previewOpen,setPreviewOpen]=useState(false);
+ const previewDialog=useRef<HTMLDivElement>(null);
  const [confirm,setConfirm]=useState<{title:string;description:string;action:()=>void}|null>(null);
  const input=useRef<HTMLInputElement>(null);const pdf=useGeneratedPDF(cv);
  const sensors=useSensors(useSensor(PointerSensor,{activationConstraint:{distance:8}}),useSensor(KeyboardSensor,{coordinateGetter:sortableKeyboardCoordinates}));
@@ -47,7 +48,25 @@ export default function App() {
  const missing=kinds.filter(id=>!cv.sections.some(section=>section.id===id));
  const startBlank=()=>ask('Start with a blank CV?','This clears your content and restores the default design. Export a backup first if you want to keep your work.',()=>{replace(blankCV());setActive('contact');setMessage('A fresh page. Start with your personal details.');});
  const resetExample=()=>ask('Reset to the example CV?','This replaces your content and design with the example. Export a backup first if you want to keep your work.',()=>{replace(exampleCV());setActive('contact');});
- useEffect(()=>{if(!previewOpen)return;const onKey=(event:KeyboardEvent)=>{if(event.key==='Escape')setPreviewOpen(false);};window.addEventListener('keydown',onKey);return()=>window.removeEventListener('keydown',onKey);},[previewOpen]);
+ useEffect(()=>{
+  if(!previewOpen)return;
+  const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  const dialog=previewDialog.current;
+  const focusable=()=>Array.from(dialog?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], [tabindex="0"]')??[]);
+  (focusable()[0]??dialog)?.focus();
+  const onKey=(event:KeyboardEvent)=>{
+   if(event.key==='Escape'){event.preventDefault();setPreviewOpen(false);}
+   if(event.key==='Tab'){
+    const items=focusable();const first=items[0];const last=items[items.length-1];
+    if(!first){event.preventDefault();dialog?.focus();}
+    else if(!dialog?.contains(document.activeElement)){event.preventDefault();first.focus();}
+    else if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+   }
+  };
+  window.addEventListener('keydown',onKey);
+  return()=>{window.removeEventListener('keydown',onKey);if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});};
+ },[previewOpen]);
  async function importFile(file?:File) {
   if(!file)return;
   try {
@@ -123,7 +142,7 @@ export default function App() {
     <div className="preview-bottom"><span><Check size={13}/>What you see is what you download.</span><span>PDF · Selectable text</span></div>
    </section>
   </main>
-  {previewOpen&&<div className="preview-modal-backdrop" role="presentation" onClick={()=>setPreviewOpen(false)}><div className="preview-modal" role="dialog" aria-modal="true" aria-label="CV preview" onClick={event=>event.stopPropagation()}><div className="preview-modal-header"><div><strong>CV preview</strong><span>Click outside or press Escape to close</span></div><Button variant="ghost" size="icon" aria-label="Close CV preview" onPress={()=>setPreviewOpen(false)}><X size={19}/></Button></div><div className="preview-modal-body"><Preview blob={pdf.blob} zoom={zoom} onPages={()=>{}}/></div></div></div>}
+  {previewOpen&&<div className="preview-modal-backdrop" role="presentation" onClick={()=>setPreviewOpen(false)}><div className="preview-modal" ref={previewDialog} tabIndex={-1} role="dialog" aria-modal="true" aria-label="CV preview" onClick={event=>event.stopPropagation()}><div className="preview-modal-header"><div><strong>CV preview</strong><span>Click outside or press Escape to close</span></div><Button variant="ghost" size="icon" aria-label="Close CV preview" onPress={()=>setPreviewOpen(false)}><X size={19}/></Button></div><div className="preview-modal-body"><Preview blob={pdf.blob} zoom={zoom} onPages={()=>{}}/></div></div></div>}
   {(message||storageStatus())&&<Alert className="app-notification" status={storageStatus()?'warning':'default'} role="status"><Alert.Content><Alert.Description>{storageStatus()||message}</Alert.Description></Alert.Content><Button variant="ghost" size="icon" onPress={()=>setMessage('')} aria-label="Dismiss notification"><X size={16}/></Button></Alert>}
   <ConfirmDialog open={!!confirm} title={confirm?.title||''} description={confirm?.description||''} onCancel={()=>setConfirm(null)} onConfirm={()=>{confirm?.action();setConfirm(null);}}/>
  </div>;

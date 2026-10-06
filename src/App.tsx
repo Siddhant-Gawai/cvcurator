@@ -13,6 +13,10 @@ import {useCV,storageStatus} from './store';
 import {blankCV,exampleCV,kinds,move,names,parseBackup,serializeBackup,type CV,type Kind} from './model';
 
 const icons={contact:UserRound,summary:FileText,experience:BriefcaseBusiness,education:GraduationCap,projects:FolderOpen,skills:Sparkles,certifications:Award,languages:Languages};
+function pdfFilename(name:string) {
+ const cleaned=name.replace(/[<>:"\/\\|?*\u0000-\u001f]/g,' ').replace(/\s+/g,' ').trim();
+ return `${cleaned||'My'}-CV.pdf`;
+}
 function download(blob:Blob,name:string) {
  const url=URL.createObjectURL(blob);const link=document.createElement('a');
  link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
@@ -92,7 +96,7 @@ export default function App() {
       <Dropdown.Item id="reset" textValue="Reset example" onAction={resetExample}><RotateCcw size={18}/><div><Label>Reset example</Label><Description>Return to the original example</Description></div></Dropdown.Item>
      </Dropdown.Menu></Dropdown.Popover>
     </Dropdown>
-    <Button disabled={pdf.busy||!!pdf.error} onPress={()=>{if(pdf.blob)download(pdf.blob,`${cv.contact.name.trim()||'My'}-CV.pdf`);}}><Download size={16}/><span>Download PDF</span></Button>
+    <Button disabled={pdf.busy||!!pdf.error} onPress={()=>{if(pdf.blob)download(pdf.blob,pdfFilename(cv.contact.name));}}><Download size={16}/><span>Download PDF</span></Button>
    </div>
    <input ref={input} type="file" accept=".json,application/json" hidden aria-label="Import backup file" onChange={event=>void importFile(event.target.files?.[0])}/>
   </header>

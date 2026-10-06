@@ -18,6 +18,7 @@ A browser-based CV builder for students and early-career professionals. Edit you
 
 ## Recent updates
 
+- **2026-10-07:** PDF download filenames remove characters unsuitable for filenames and collapse extra whitespace in the contact name. Empty names use My-CV.pdf; the name printed on the CV is unchanged.
 - **2026-10-05:** Opening the expanded preview moves keyboard focus into the dialog. Tab and Shift+Tab stay within its controls, and closing it restores focus to the previously focused element without scrolling.
 - **2026-10-03:** Removed the obsolete, CSS-hidden footer alignment dropdown. The icon controls are now the only alignment selector, and the heading reads Footer alignment when zero or multiple footer items are selected.
 - **2026-10-01 (keyboard patch):** Activating the focused resume preview with Space no longer scrolls the page while opening the popup. The preview trigger also announces that it opens a dialog to assistive technology.

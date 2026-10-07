@@ -6,12 +6,11 @@ import {CVDocument} from './pdf';
 import type {CV} from './model';
 GlobalWorkerOptions.workerSrc=worker;
 export function useGeneratedPDF(cv:CV){
- const [result,setResult]=useState<{blob:Blob;url:string;cv:CV}|null>(null);
+ const [result,setResult]=useState<{blob:Blob;cv:CV}|null>(null);
  const [failure,setFailure]=useState<{cv:CV;message:string}|null>(null);
  const latest=useRef(cv); latest.current=cv; const running=useRef(false); const queued=useRef<CV|null>(null);const alive=useRef(true);
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
- useEffect(()=>{const timer=setTimeout(()=>{queued.current=cv;void run();},550);async function run(){if(running.current)return;running.current=true;while(queued.current){const next=queued.current;queued.current=null;try{const blob=await pdf(<CVDocument cv={next}/>).toBlob();if(alive.current&&next===latest.current){setResult({blob,url:URL.createObjectURL(blob),cv:next});setFailure(null);}}catch{if(alive.current&&next===latest.current)setFailure({cv:next,message:'We could not prepare your PDF. Try another font or reload the app.'});}}running.current=false;}return()=>clearTimeout(timer);},[cv]);
- useEffect(()=>()=>{if(result)URL.revokeObjectURL(result.url);},[result]);
+ useEffect(()=>{const timer=setTimeout(()=>{queued.current=cv;void run();},550);async function run(){if(running.current)return;running.current=true;while(queued.current){const next=queued.current;queued.current=null;try{const blob=await pdf(<CVDocument cv={next}/>).toBlob();if(alive.current&&next===latest.current){setResult({blob,cv:next});setFailure(null);}}catch{if(alive.current&&next===latest.current)setFailure({cv:next,message:'We could not prepare your PDF. Try another font or reload the app.'});}}running.current=false;}return()=>clearTimeout(timer);},[cv]);
  const error=failure?.cv===cv?failure.message:'';
  return {...result,error,busy:!error&&(!result||result.cv!==cv)};
 }

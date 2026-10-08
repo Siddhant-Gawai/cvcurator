@@ -18,6 +18,7 @@ A browser-based CV builder for students and early-career professionals. Edit you
 
 ## Recent updates
 
+- **2026-10-09:** PDF and JSON backup downloads temporarily attach their download link to the page. The link is removed and its browser URL scheduled for release even if triggering the download throws.
 - **2026-10-07 (PDF resource patch):** Removed unused object URLs from preview generation. Preview and download continue to share the generated PDF blob; a download URL is created only when a file is actually downloaded.
 - **2026-10-07:** PDF download filenames remove characters unsuitable for filenames and collapse extra whitespace in the contact name. Empty names use My-CV.pdf; the name printed on the CV is unchanged.
 - **2026-10-05:** Opening the expanded preview moves keyboard focus into the dialog. Tab and Shift+Tab stay within its controls, and closing it restores focus to the previously focused element without scrolling.

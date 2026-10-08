@@ -19,7 +19,10 @@ function pdfFilename(name:string) {
 }
 function download(blob:Blob,name:string) {
  const url=URL.createObjectURL(blob);const link=document.createElement('a');
- link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
+ link.href=url;link.download=name;
+ document.body.appendChild(link);
+ try {link.click();}
+ finally {link.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);}
 }
 
 function SectionNav({section,active,onSelect}:{section:CV['sections'][number];active:boolean;onSelect:()=>void}) {

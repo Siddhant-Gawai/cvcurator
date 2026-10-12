@@ -27,7 +27,7 @@ export function exampleCV():CV{return {contact:{name:'Alex Morgan',headline:'Pro
 ]};}
 export function blankCV():CV{return {contact:{name:'',headline:'',email:'',phone:'',location:'',website:'',linkedin:''},settings:{...defaults},sections:kinds.map(id=>({id,hidden:false,entries:[]}))};}
 export function move<T>(items:T[],from:number,to:number):T[]{if(from<0||to<0||from>=items.length||to>=items.length)return items; const result=[...items];result.splice(to,0,result.splice(from,1)[0]);return result;}
-export function parseBackup(raw:string):CV {return backupSchema.parse(JSON.parse(raw)).cv;}
+export function parseBackup(raw:string):CV {return backupSchema.parse(JSON.parse(raw.replace(/^\uFEFF/,''))).cv;}
 export const serializeBackup=(cv:CV)=>JSON.stringify({version:1,cv},null,2);
 export function linkFor(value:string):string|undefined{const trimmed=value.trim();if(!trimmed)return; try{const url=new URL(/^https?:\/\//i.test(trimmed)?trimmed:`https://${trimmed}`);return ['https:','http:'].includes(url.protocol)&&url.hostname.includes('.')?url.href:undefined;}catch{return;}}
 export const contactValidation=contactSchema.extend({email:z.union([z.literal(''),z.email('Enter a valid email address.')]),website:z.string().refine(v=>!v||!!linkFor(v),'Enter a website address, such as example.com.'),linkedin:z.string().refine(v=>!v||!!linkFor(v),'Enter a valid profile address.')});

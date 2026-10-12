@@ -18,6 +18,7 @@ A browser-based CV builder for students and early-career professionals. Edit you
 
 ## Recent updates
 
+- **2026-10-12:** JSON backup import accepts an optional leading UTF-8 byte-order mark added by some text editors. Existing backup version and CV validation still apply.
 - **2026-10-11:** Website and profile link handling now trims surrounding whitespace before validation and PDF link generation, so pasted addresses with extra spaces resolve correctly.
 - **2026-10-09:** PDF and JSON backup downloads temporarily attach their download link to the page. The link is removed and its browser URL scheduled for release even if triggering the download throws.
 - **2026-10-07 (PDF resource patch):** Removed unused object URLs from preview generation. Preview and download continue to share the generated PDF blob; a download URL is created only when a file is actually downloaded.

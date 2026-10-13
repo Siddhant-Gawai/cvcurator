@@ -76,12 +76,12 @@ export default function App() {
  },[previewOpen]);
  async function importFile(file?:File) {
   if(!file)return;
+  if(input.current)input.current.value='';
+  if(file.size>3_000_000){setMessage('This backup is too large. Choose a JSON backup of 3 MB or less.');return;}
   try {
-   if(file.size>3_000_000)throw Error();
    const imported=parseBackup(await file.text());
    ask('Replace your current CV?','The backup will replace your current content and design. Export your current CV as a backup first if you want to keep it.',()=>{replace(imported);setActive('contact');setMessage('Backup imported. Your CV is ready to edit.');});
   } catch {setMessage('This backup could not be imported. Choose a valid Folio JSON backup (version 1, under 3 MB).');}
-  if(input.current)input.current.value='';
  }
  return <div className="app-shell">
   <header className="app-header">

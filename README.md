@@ -18,6 +18,7 @@ A browser-based CV builder for students and early-career professionals. Edit you
 
 ## Recent updates
 
+- **2026-10-14:** Expanded preview height follows the dynamic viewport on supported browsers, helping it fit when mobile browser controls change height. Older browsers retain the existing viewport-height fallback.
 - **2026-10-13:** Oversized backup imports now show a specific 3 MB limit message before reading the file. The file picker resets immediately so the same file can be selected again.
 - **2026-10-12:** JSON backup import accepts an optional leading UTF-8 byte-order mark added by some text editors. Existing backup version and CV validation still apply.
 - **2026-10-11:** Website and profile link handling now trims surrounding whitespace before validation and PDF link generation, so pasted addresses with extra spaces resolve correctly.

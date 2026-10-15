@@ -45,7 +45,7 @@ export function Preview({blob,zoom,onPages}:{blob?:Blob;zoom:number;onPages:(n:n
   {error?<p className="preview-loading" role="alert">{error}</p>:pages.length?pages.map(page=><div className="paper-wrap" key={`${blob?.size}-${page.pageNumber}`}>
    <Paper page={page} scale={Math.max(.25,Math.min((width-64)/page.getViewport({scale:1}).width,1.15))*zoom/100}/>
    <span className="paper-caption">PAGE {page.pageNumber} OF {pages.length}</span>
-  </div>):<div className="preview-loading"><span className="spinner"/>Preparing your document…</div>}
+  </div>):<div className="preview-loading" role="status"><span className="spinner" aria-hidden="true"/>Preparing your document…</div>}
  </div>;
 }
 

@@ -115,7 +115,7 @@ export default function App() {
     <div className="sidebar-navigation">{tab==='content'?<>
      <div className="nav-label">CV SECTIONS</div>
      <Button variant="ghost" className={`contact-nav ${active==='contact'?'selected':''}`} onPress={()=>setActive('contact')}><UserRound size={17}/><span>Personal details</span><Check size={14}/></Button>
-     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={({active:dragged,over})=>{if(over)reorder(cv.sections.findIndex(section=>section.id===dragged.id),cv.sections.findIndex(section=>section.id===over.id));}}>
+     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={({active:dragged,over})=>{if(over&&dragged.id!==over.id)reorder(cv.sections.findIndex(section=>section.id===dragged.id),cv.sections.findIndex(section=>section.id===over.id));}}>
       <SortableContext items={cv.sections.map(section=>section.id)} strategy={verticalListSortingStrategy}>{cv.sections.map(section=><SectionNav key={section.id} section={section} active={active===section.id} onSelect={()=>setActive(section.id)}/>)}</SortableContext>
      </DndContext>
      {missing.length>0&&<Dropdown><Button variant="ghost" className="add-section"><Plus size={16}/>Add a section<ChevronDown size={14}/></Button><Dropdown.Popover className="folio-menu-popover"><Dropdown.Menu aria-label="Add section">{missing.map(id=>{const Icon=icons[id];return <Dropdown.Item key={id} id={id} textValue={names[id]} onAction={()=>{update(cv=>({...cv,sections:[...cv.sections,{id,hidden:false,entries:[]}]}));setActive(id);}}><Icon size={17}/><Label>{names[id]}</Label></Dropdown.Item>;})}</Dropdown.Menu></Dropdown.Popover></Dropdown>}

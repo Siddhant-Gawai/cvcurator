@@ -18,6 +18,7 @@ A browser-based CV builder for students and early-career professionals. Edit you
 
 ## Recent updates
 
+- **2026-10-22:** Dropping a section or entry onto its original position skips the state update, avoiding an unnecessary local save and PDF regeneration.
 - **2026-10-16:** The initial PDF preview loading message is a screen-reader status region, and its decorative spinner is hidden from assistive technology.
 - **2026-10-15:** Contact email and phone inputs request their appropriate mobile keyboards. Name, email, and phone fields include browser autofill hints to speed up entering personal details.
 - **2026-10-14:** Expanded preview height follows the dynamic viewport on supported browsers, helping it fit when mobile browser controls change height. Older browsers retain the existing viewport-height fallback.

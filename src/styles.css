@@ -74,6 +74,7 @@
 .setting-heading h3>svg,.design-block h3>svg,.slider-label>.label>svg{display:block;width:16px;height:16px;align-self:center;margin:0}
 .preview-click-target{cursor:zoom-in;border-radius:18px;outline:none;flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .preview-click-target>.paper-scroll{height:100%}
+.preview-modal-body .paper-scroll{overscroll-behavior:contain}
 .preview-click-target:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,#4f46e5) 35%,transparent)}
 .preview-modal-backdrop{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:rgba(15,23,42,.62);backdrop-filter:blur(5px)}
 .preview-modal{width:min(920px,96vw);height:min(92vh,980px);height:min(92dvh,980px);display:flex;flex-direction:column;overflow:hidden;background:#f5f6f8;border:1px solid rgba(255,255,255,.35);border-radius:20px;box-shadow:0 24px 80px rgba(15,23,42,.3)}

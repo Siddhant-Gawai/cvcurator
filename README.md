@@ -18,6 +18,7 @@ A browser-based CV builder for students and early-career professionals. Edit you
 
 ## Recent updates
 
+- **2026-10-28:** Email, website, and LinkedIn contact fields disable automatic capitalization and spellcheck to reduce unwanted keyboard changes to addresses.
 - **2026-10-27:** Unmounting the builder clears queued PDF generation work, preventing a pending render from starting after the editor closes. An already-running render can finish without updating the closed editor.
 - **2026-10-23:** Expanded preview scrolling is contained within the popup, preventing scroll gestures at its edges from continuing into the workspace behind it on supported browsers.
 - **2026-10-22:** Dropping a section or entry onto its original position skips the state update, avoiding an unnecessary local save and PDF regeneration.

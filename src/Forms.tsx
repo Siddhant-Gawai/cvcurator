@@ -27,7 +27,7 @@ export function ContactForm() {
  return <div className="field-grid">{contactFields.map(definition=>{
   const Icon=definition.icon!;
   return <Controller key={definition.key} name={definition.key as keyof Contact} control={control} render={({field,fieldState})=><TextField className={`folio-field ${definition.wide?'wide':''}`} name={field.name} value={field.value} onChange={field.onChange} onBlur={field.onBlur} isInvalid={!!fieldState.error} validationBehavior="aria">
-   <Label>{definition.label}</Label><InputGroup><InputGroup.Prefix><Icon size={16}/></InputGroup.Prefix><InputGroup.Input ref={field.ref} type={definition.key==='email'?'email':definition.key==='phone'?'tel':'text'} autoComplete={definition.key==='name'?'name':definition.key==='email'?'email':definition.key==='phone'?'tel':undefined} placeholder={definition.placeholder} maxLength={1000}/></InputGroup>{fieldState.error&&<FieldError>{fieldState.error.message}</FieldError>}
+   <Label>{definition.label}</Label><InputGroup><InputGroup.Prefix><Icon size={16}/></InputGroup.Prefix><InputGroup.Input ref={field.ref} type={definition.key==='email'?'email':definition.key==='phone'?'tel':'text'} autoComplete={definition.key==='name'?'name':definition.key==='email'?'email':definition.key==='phone'?'tel':undefined} autoCapitalize={['email','website','linkedin'].includes(definition.key)?'none':undefined} spellCheck={['email','website','linkedin'].includes(definition.key)?false:undefined} placeholder={definition.placeholder} maxLength={1000}/></InputGroup>{fieldState.error&&<FieldError>{fieldState.error.message}</FieldError>}
   </TextField>}/>;
  })}</div>;
 }

@@ -7,7 +7,7 @@ import {SortableContext,useSortable,verticalListSortingStrategy,sortableKeyboard
 import {CSS} from '@dnd-kit/utilities';
 import {ArrowDown,ArrowUp,CalendarDays,Eye,EyeOff,Globe,GripVertical,Link,Linkedin,Mail,MapPin,Phone,Plus,Trash2,BriefcaseBusiness,UserRound,Type,Building2,AlignLeft,type LucideIcon} from 'lucide-react';
 import {useCV} from './store';
-import {contactValidation,emptyEntry,move,names,type Contact,type Entry,type Kind} from './model';
+import {contactValidation,emptyEntry,linkFor,move,names,type Contact,type Entry,type Kind} from './model';
 import {Button} from './components/ui/button';
 
 type Field={key:string;label:string;placeholder?:string;wide?:boolean;area?:boolean;icon?:LucideIcon};
@@ -49,12 +49,12 @@ type EntryDraft=Omit<Entry,'id'|'hidden'>;
 function EntryFields({entry,kind}:{entry:Entry;kind:Kind}) {
  const update=useCV(state=>state.update);
  const {id:_id,hidden:_hidden,...draft}=entry;
- const {control,subscribe}=useForm<EntryDraft>({defaultValues:draft});
+ const {control,subscribe}=useForm<EntryDraft>({defaultValues:draft,mode:'onChange'});
  useEffect(()=>subscribe({formState:{values:true},callback:({values})=>update(cv=>({...cv,sections:cv.sections.map(section=>section.id===kind?{...section,entries:section.entries.map(item=>item.id===entry.id?{...item,...values}:item)}:section)}))}),[subscribe,update,kind,entry.id]);
  return <div className="field-grid">{fields(kind).map(definition=>{
   const Icon=definition.icon||AlignLeft;
-  return <Controller key={definition.key} name={definition.key as keyof EntryDraft} control={control} render={({field})=><TextField className={`folio-field ${definition.wide?'wide':''}`} name={field.name} value={field.value} onChange={field.onChange} onBlur={field.onBlur}>
-   <Label>{definition.label}</Label><InputGroup>{!definition.area&&<InputGroup.Prefix><Icon size={15}/></InputGroup.Prefix>}{definition.area?<InputGroup.TextArea ref={field.ref} rows={kind==='summary'?7:4} maxLength={12000} placeholder={definition.placeholder}/>:<InputGroup.Input ref={field.ref} maxLength={1000} placeholder={definition.placeholder||`Enter ${definition.label.toLowerCase()}`}/>}</InputGroup>
+  return <Controller key={definition.key} name={definition.key as keyof EntryDraft} control={control} rules={definition.key==='url'?{validate:value=>!value||!!linkFor(value)||'Enter a website address, such as example.com.'}:undefined} render={({field,fieldState})=><TextField className={`folio-field ${definition.wide?'wide':''}`} name={field.name} value={field.value} onChange={field.onChange} onBlur={field.onBlur} isInvalid={!!fieldState.error} validationBehavior="aria">
+   <Label>{definition.label}</Label><InputGroup>{!definition.area&&<InputGroup.Prefix><Icon size={15}/></InputGroup.Prefix>}{definition.area?<InputGroup.TextArea ref={field.ref} rows={kind==='summary'?7:4} maxLength={12000} placeholder={definition.placeholder}/>:<InputGroup.Input ref={field.ref} maxLength={1000} placeholder={definition.placeholder||`Enter ${definition.label.toLowerCase()}`}/>}</InputGroup>{fieldState.error&&<FieldError>{fieldState.error.message}</FieldError>}
   </TextField>}/>;
  })}</div>;
 }

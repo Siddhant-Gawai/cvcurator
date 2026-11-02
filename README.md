@@ -18,6 +18,7 @@ A browser-based CV builder for students and early-career professionals. Edit you
 
 ## Recent updates
 
+- **2026-11-02:** Adding entries now respects the shared 150-entry limit per section used by backup validation. The Add button disables at the limit with an explanation, preventing the editor from creating backups that exceed that entry limit.
 - **2026-10-31:** Entry visibility buttons expose their pressed state to assistive technology. Entry drag handles also provide a tooltip explaining keyboard reordering with Space and arrow keys.
 - **2026-10-29:** Optional entry links now show inline validation feedback while editing, using the same address rules as PDF links. Empty links remain valid and drafts continue saving locally.
 - **2026-10-28:** Email, website, and LinkedIn contact fields disable automatic capitalization and spellcheck to reduce unwanted keyboard changes to addresses.

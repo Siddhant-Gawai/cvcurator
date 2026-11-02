@@ -7,7 +7,7 @@ import {SortableContext,useSortable,verticalListSortingStrategy,sortableKeyboard
 import {CSS} from '@dnd-kit/utilities';
 import {ArrowDown,ArrowUp,CalendarDays,Eye,EyeOff,Globe,GripVertical,Link,Linkedin,Mail,MapPin,Phone,Plus,Trash2,BriefcaseBusiness,UserRound,Type,Building2,AlignLeft,type LucideIcon} from 'lucide-react';
 import {useCV} from './store';
-import {contactValidation,emptyEntry,linkFor,move,names,type Contact,type Entry,type Kind} from './model';
+import {contactValidation,emptyEntry,linkFor,MAX_ENTRIES_PER_SECTION,move,names,type Contact,type Entry,type Kind} from './model';
 import {Button} from './components/ui/button';
 
 type Field={key:string;label:string;placeholder?:string;wide?:boolean;area?:boolean;icon?:LucideIcon};
@@ -75,6 +75,7 @@ export function SectionForm({kind,confirm}:{kind:Kind;confirm:(title:string,desc
   {section.entries.map((entry,index)=><EntryCard key={entry.id} entry={entry} kind={kind} index={index} total={section.entries.length} onMove={to=>reorder(index,to)} onDelete={()=>confirm('Delete this entry?','This entry will be removed from your CV. Export a backup first if you want to keep it.',()=>update(cv=>({...cv,sections:cv.sections.map(section=>section.id===kind?{...section,entries:section.entries.filter(item=>item.id!==entry.id)}:section)})))}/>)}
  </SortableContext></DndContext>
  {!section.entries.length&&<div className="empty-state"><BriefcaseBusiness size={28}/><h3>Tell more of your story.</h3><p>Add your {names[kind].toLowerCase()} to get started.</p></div>}
- <Button variant="outline" className="add-entry" onPress={()=>update(cv=>({...cv,sections:cv.sections.map(section=>section.id===kind?{...section,entries:[...section.entries,emptyEntry()]}:section)}))}><Plus size={16}/>Add {kind==='summary'?'paragraph':kind==='skills'?'skill group':kind==='languages'?'language':'entry'}</Button>
+ <Button variant="outline" className="add-entry" disabled={section.entries.length>=MAX_ENTRIES_PER_SECTION} onPress={()=>update(cv=>({...cv,sections:cv.sections.map(section=>section.id===kind&&section.entries.length<MAX_ENTRIES_PER_SECTION?{...section,entries:[...section.entries,emptyEntry()]}:section)}))}><Plus size={16}/>Add {kind==='summary'?'paragraph':kind==='skills'?'skill group':kind==='languages'?'language':'entry'}</Button>
+ {section.entries.length>=MAX_ENTRIES_PER_SECTION&&<p className="hidden-note">This section has reached its limit of {MAX_ENTRIES_PER_SECTION} entries. Remove an entry to add another.</p>}
  </>;
 }
